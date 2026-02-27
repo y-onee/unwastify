@@ -360,7 +360,6 @@ resource "aws_api_gateway_authorizer" "cognito" {
   provider_arns = [aws_cognito_user_pool.user_pool.arn]
 }
 
-
 # Deploy
 resource "aws_api_gateway_deployment" "shopping_api" {
   rest_api_id = aws_api_gateway_rest_api.shopping_api.id

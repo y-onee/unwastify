@@ -37,3 +37,25 @@ resource "aws_s3_bucket_public_access_block" "terraform_state_bucket_public_acce
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+
+#Logs to s3
+resource "aws_s3_bucket" "logs_bucket" {
+  bucket = "unwastify-logs"
+}
+
+resource "aws_s3_bucket_versioning" "logs_bucket_versioning" {
+  bucket = aws_s3_bucket.logs_bucket.id
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "logs_bucket" {
+  bucket = aws_s3_bucket.logs_bucket.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}

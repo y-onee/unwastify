@@ -101,6 +101,13 @@ resource "aws_codebuild_project" "unwastify" {
     type      = "CODEPIPELINE"
     buildspec = "buildspec.yml"
   }
+
+  logs_config {
+    s3_logs {
+      status   = "ENABLED"
+      location = "${aws_s3_bucket.logs_bucket.bucket}/codebuild-logs"
+    }
+  }
 }
 
 # CodePipeline
@@ -126,6 +133,7 @@ resource "aws_codepipeline" "unwastify" {
     type     = "S3"
   }
 
+  execution_mode = "QUEUED"
   stage {
     name = "Source"
 
