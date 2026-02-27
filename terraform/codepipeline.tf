@@ -107,6 +107,19 @@ resource "aws_codebuild_project" "unwastify" {
 resource "aws_codepipeline" "unwastify" {
   name     = "unwastify-pipeline"
   role_arn = aws_iam_role.codepipeline_role.arn
+  pipeline_type = "V2"
+
+  trigger {
+    provider_type = "CodeStarSourceConnection"
+    git_configuration {
+      source_action_name = "Source"
+      push {
+        branches {
+          includes = ["main"]
+        }
+      }
+    }
+  }
 
   artifact_store {
     location = aws_s3_bucket.app_bucket.bucket
