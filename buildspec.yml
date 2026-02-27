@@ -1,0 +1,22 @@
+version: 1.0
+
+phases:
+  install:
+    runtime-versions: python 3.13
+    commands:
+      - cd terraform
+      - wget https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
+      - unzip terraform_1.5.7_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+
+  build:
+    commands:
+      - cd terraform
+      - mkdir -p lambdas
+      - for lambda in add_to_pantry delete_pantry_item delete_shopping_item generate_shopping_list get_pantry get_shopping_list mark_as_bought mark_expired mark_wasted post_confirmation update_family_info; do zip -j lambdas/$lambda.zip src/$lambda.py layers/common_utils/python/decimal_helper.py; done
+      - terraform init
+      - terraform apply -auto-approve
+
+artifacts:
+  files:
+    - "**/*"
