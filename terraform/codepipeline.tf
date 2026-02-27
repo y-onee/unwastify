@@ -172,3 +172,25 @@ resource "aws_codepipeline" "unwastify" {
     }
   }
 }
+
+# EventBridge rule to trigger pipeline on GitHub push
+resource "aws_cloudwatch_event_rule" "pipeline_trigger" {
+  name        = "unwastify-pipeline-trigger"
+  description = "Trigger CodePipeline on GitHub push to main"
+
+  event_pattern = jsonencode({
+    source      = ["aws.codeconnections"]
+    "detail-type" = ["CodeConnection Repository Push Event"]
+    detail = {
+      connectionArn = [aws_codestarconnections_connection.github.arn]
+      referenceName = ["main"]
+      referenceType = ["branch"]
+    }
+  })
+}
+
+resource "aws_cloudwatch_event_target" "pipeline_target" {
+  rule     = aws_cloudwatch_event_rule.pipeline_trigger.name
+  arn      = aws_codepipeline.unwastify.arn
+  role_arn = aws_iam_role.codepipeline_role.arn
+}
