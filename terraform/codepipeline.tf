@@ -179,7 +179,7 @@ resource "aws_cloudwatch_event_rule" "pipeline_trigger" {
   description = "Trigger CodePipeline on GitHub push to main"
 
   event_pattern = jsonencode({
-    source      = ["aws.codeconnections"]
+    source        = ["aws.codeconnections"]
     "detail-type" = ["CodeConnection Repository Push Event"]
     detail = {
       connectionArn = [aws_codestarconnections_connection.github.arn]
