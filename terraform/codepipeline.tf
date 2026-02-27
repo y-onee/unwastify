@@ -184,3 +184,5 @@ resource "aws_cloudwatch_event_target" "pipeline_target" {
   arn      = aws_codepipeline.unwastify.arn
   role_arn = aws_iam_role.codepipeline_role.arn
 }
+
+#change to check pipeline trigger
