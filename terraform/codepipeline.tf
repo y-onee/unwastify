@@ -139,7 +139,6 @@ resource "aws_codepipeline" "unwastify" {
         ConnectionArn    = aws_codestarconnections_connection.github.arn
         FullRepositoryId = "y-onee/unwastify"
         BranchName       = "main"
-        DetectChanges    = "false"
       }
     }
   }
@@ -185,4 +184,4 @@ resource "aws_cloudwatch_event_target" "pipeline_target" {
   role_arn = aws_iam_role.codepipeline_role.arn
 }
 
-#change to check pipeline trigger
+#change to check pipeline trigger 2
