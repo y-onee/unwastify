@@ -128,6 +128,7 @@ resource "aws_codepipeline" "unwastify" {
         ConnectionArn    = aws_codestarconnections_connection.github.arn
         FullRepositoryId = "y-onee/unwastify"
         BranchName       = "main"
+        DetectChanges    = "true"
       }
     }
   }
