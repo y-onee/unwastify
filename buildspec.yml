@@ -1,8 +1,9 @@
-version: 1.0
+version: 0.1
 
 phases:
   install:
-    runtime-versions: python 3.13
+    runtime-versions:
+      python: "3.13"
     commands:
       - cd terraform
       - wget https://releases.hashicorp.com/terraform/1.5.7/terraform_1.5.7_linux_amd64.zip
