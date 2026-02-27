@@ -112,8 +112,8 @@ resource "aws_codebuild_project" "unwastify" {
 
 # CodePipeline
 resource "aws_codepipeline" "unwastify" {
-  name     = "unwastify-pipeline"
-  role_arn = aws_iam_role.codepipeline_role.arn
+  name          = "unwastify-pipeline"
+  role_arn      = aws_iam_role.codepipeline_role.arn
   pipeline_type = "V2"
 
   trigger {
@@ -149,7 +149,7 @@ resource "aws_codepipeline" "unwastify" {
         ConnectionArn    = aws_codestarconnections_connection.github.arn
         FullRepositoryId = "y-onee/unwastify"
         BranchName       = "main"
-        DetectChanges    = "true"
+        DetectChanges    = "false"
       }
     }
   }
