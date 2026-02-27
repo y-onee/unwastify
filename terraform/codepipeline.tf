@@ -59,17 +59,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
     Statement = [
       {
         Effect = "Allow"
-        Action = [
-          "s3:*",
-          "logs:*",
-          "lambda:*",
-          "iam:*",
-          "dynamodb:*",
-          "apigateway:*",
-          "cognito-idp:*",
-          "ecr:*",
-          "cloudwatch:*"
-        ]
+        Action = "*"
         Resource = "*"
       }
     ]
@@ -179,7 +169,7 @@ resource "aws_cloudwatch_event_rule" "pipeline_trigger" {
   description = "Trigger CodePipeline on GitHub push to main"
 
   event_pattern = jsonencode({
-    source        = ["aws.codeconnections"]
+    source        = ["aws.codestar-connections"]
     "detail-type" = ["CodeConnection Repository Push Event"]
     detail = {
       connectionArn = [aws_codestarconnections_connection.github.arn]
