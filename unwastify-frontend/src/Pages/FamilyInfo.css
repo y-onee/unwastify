@@ -1,0 +1,28 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.success-msg {
+  background: #fce4ec;
+  color: #e91e8c;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}

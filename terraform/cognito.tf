@@ -30,5 +30,20 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   explicit_auth_flows = [
     "ALLOW_USER_PASSWORD_AUTH",
     "ALLOW_REFRESH_TOKEN_AUTH",
+    "ALLOW_USER_SRP_AUTH"
   ]
+
+  callback_urls = ["http://localhost:5173", "http://localhost:3000"]
+  logout_urls   = ["http://localhost:5173", "http://localhost:3000"]
+
+  allowed_oauth_flows                  = ["code"]
+  allowed_oauth_scopes                 = ["email", "openid", "profile"]
+  allowed_oauth_flows_user_pool_client = true
+
+  supported_identity_providers = ["COGNITO"]
+}
+
+resource "aws_cognito_user_pool_domain" "main" {
+  domain       = "unwastify"
+  user_pool_id = aws_cognito_user_pool.user_pool.id
 }
