@@ -67,7 +67,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
 }
 
 # GitHub connection
-resource "aws_codestarconnections_connection" "github" {
+resource "aws_codeconnections_connection" "github" {
   name          = "unwastify-github"
   provider_type = "GitHub"
 }
@@ -136,7 +136,7 @@ resource "aws_codepipeline" "unwastify" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        ConnectionArn    = aws_codeconnections_connection.github.arn
         FullRepositoryId = "y-onee/unwastify"
         BranchName       = "main"
       }
@@ -171,7 +171,7 @@ resource "aws_cloudwatch_event_rule" "pipeline_trigger" {
     source        = ["aws.codestar-connections"]
     "detail-type" = ["CodeConnection Repository Push Event"]
     detail = {
-      connectionArn = [aws_codestarconnections_connection.github.arn]
+      connectionArn = [aws_codeconnections_connection.github.arn]
       referenceName = ["main"]
       referenceType = ["branch"]
     }
