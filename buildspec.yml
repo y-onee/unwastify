@@ -18,7 +18,7 @@ phases:
       - for lambda in add_to_pantry delete_pantry_item delete_shopping_item generate_shopping_list get_pantry get_shopping_list mark_as_bought mark_expired mark_wasted post_confirmation update_family_info; do zip -j lambdas/$lambda.zip src/$lambda.py layers/common_utils/python/decimal_helper.py; done
       - terraform init
       - terraform apply -auto-approve
-      - cd $CODEBUILD_SRC_DIR/unwastify-frontend && npm run build
+      - cd unwastify-frontend && npm run build
       - aws s3 sync dist/ s3://unwastify-frontend --delete
 
 artifacts:
