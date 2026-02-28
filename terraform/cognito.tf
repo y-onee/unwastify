@@ -33,8 +33,8 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
     "ALLOW_USER_SRP_AUTH"
   ]
 
-  callback_urls = ["http://localhost:5173", "http://localhost:3000"]
-  logout_urls   = ["http://localhost:5173", "http://localhost:3000"]
+  callback_urls = ["http://localhost:5173", "http://localhost:3000", "https://d1yat59iwg4dcp.cloudfront.net"]
+  logout_urls   = ["http://localhost:5173", "http://localhost:3000", "https://d1yat59iwg4dcp.cloudfront.net"]
 
   allowed_oauth_flows                  = ["code"]
   allowed_oauth_scopes                 = ["email", "openid", "profile"]
