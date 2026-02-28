@@ -1,0 +1,69 @@
+.dashboard-welcome {
+  margin-bottom: 24px;
+}
+
+.dashboard-welcome h2 {
+  font-size: 1.8rem;
+  color: #e91e8c;
+}
+
+.dashboard-welcome p {
+  color: #999;
+  margin-top: 4px;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card.warning .stat-number {
+  color: #ff9800;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #e91e8c;
+}
+
+.stat-label {
+  color: #999;
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.expiring-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #fce4ec;
+}
+
+.expiring-item:last-child {
+  border-bottom: none;
+}
+
+.expiry-date {
+  color: #ff9800;
+  font-size: 0.9rem;
+}
+
+.download-card h3 {
+  margin-bottom: 8px;
+}
+
+.download-card p {
+  color: #999;
+  margin-bottom: 16px;
+}

@@ -25,6 +25,12 @@ function Navbar() {
       <div className="navbar-brand">Unwastify</div>
       <div className="navbar-links">
         <Link
+          to="/dashboard"
+          className={location.pathname === "/dashboard" ? "active" : ""}
+        >
+          Dashboard
+        </Link>
+        <Link
           to="/pantry"
           className={location.pathname === "/pantry" ? "active" : ""}
         >

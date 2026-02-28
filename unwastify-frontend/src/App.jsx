@@ -11,6 +11,7 @@ import Pantry from "./Pages/Pantry";
 import ShoppingList from "./Pages/ShoppingList";
 import FamilyInfo from "./Pages/FamilyInfo";
 import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
 import "./App.css";
 
 function App() {
@@ -26,7 +27,9 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={auth.isAuthenticated ? <Navigate to="/pantry" /> : <Login />}
+          element={
+            auth.isAuthenticated ? <Navigate to="/dashboard" /> : <Login />
+          }
         />
         <Route
           path="/pantry"
@@ -41,6 +44,10 @@ function App() {
         <Route
           path="/family-info"
           element={auth.isAuthenticated ? <FamilyInfo /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/dashboard"
+          element={auth.isAuthenticated ? <Dashboard /> : <Navigate to="/" />}
         />
       </Routes>
     </Router>
