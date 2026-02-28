@@ -1,39 +1,242 @@
 .login-container {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #fff5f7 0%, #fce4ec 100%);
+  justify-content: center;
+  padding: 1.5rem;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.blobs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+}
+
+.blob-1 {
+  width: 400px;
+  height: 400px;
+  background: #fba1b7;
+  top: -100px;
+  left: -100px;
+  animation: float 10s ease-in-out infinite alternate;
+}
+
+.blob-2 {
+  width: 500px;
+  height: 500px;
+  background: #ffd1dc;
+  bottom: -150px;
+  right: -100px;
+  animation: float 12s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, -50px) scale(1.1); }
 }
 
 .login-card {
-  background: white;
-  border-radius: 20px;
-  padding: 48px;
+  position: relative;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 36px;
+  padding: 3.5rem 2rem;
   text-align: center;
-  box-shadow: 0 8px 32px rgba(233, 30, 140, 0.15);
-  width: 360px;
+  box-shadow: 0 16px 40px rgba(251, 161, 183, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  width: 100%;
+  max-width: 420px;
+  z-index: 1;
+  transition: max-width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.login-card.expanded {
+  max-width: 600px;
+}
+
+.sparkle {
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0.8;
+  animation: twinkle 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.sparkle-1 {
+  top: -15px;
+  left: -15px;
+  font-size: 2rem;
+}
+
+.sparkle-2 {
+  bottom: -10px;
+  right: -10px;
+  font-size: 2.25rem;
+  animation-delay: 1.5s;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+  100% { opacity: 1; transform: scale(1.1) rotate(10deg); }
 }
 
 .login-logo {
-  font-size: 3rem;
-  margin-bottom: 16px;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #fff0f3 0%, #ffe4e8 100%);
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 8px 24px rgba(251, 161, 183, 0.3);
+  color: var(--color-primary);
 }
 
 .login-card h1 {
   font-size: 2rem;
-  color: #e91e8c;
-  margin-bottom: 8px;
+  font-weight: 700;
+  font-family: 'Lora', serif;
+  color: #d15a7c;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
-.login-card p {
-  color: #999;
-  margin-bottom: 32px;
+.login-card .tagline {
+  color: #9b8b90;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 2.25rem;
 }
 
 .login-btn {
   width: 100%;
-  padding: 14px;
-  font-size: 1rem;
+  padding: 14px 24px;
+  font-size: 1.05rem;
   font-weight: 600;
+  background: linear-gradient(135deg, #fba1b7 0%, #f78da7 100%);
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(251, 161, 183, 0.4);
+  border: 2px solid #ffffff;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(251, 161, 183, 0.5);
+}
+
+.login-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Welcome Step */
+.welcome-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cute-text {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: center;
+  max-width: 250px;
+  line-height: 1.5;
+}
+
+.welcome-step .btn-primary {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(251, 161, 183, 0.4);
+}
+
+/* Amplify UI Overrides for Magical Theme */
+.auth-wrapper [data-amplify-authenticator] {
+  --amplify-colors-background-primary: transparent;
+  --amplify-colors-background-secondary: transparent;
+  --amplify-components-authenticator-router-background-color: transparent;
+  --amplify-components-authenticator-router-box-shadow: none;
+  --amplify-components-authenticator-router-border-width: 0;
+  
+  --amplify-colors-brand-primary-10: #ffe4e8;
+  --amplify-colors-brand-primary-20: #ffc2d1;
+  --amplify-colors-brand-primary-40: #fba1b7;
+  --amplify-colors-brand-primary-60: #f78da7;
+  --amplify-colors-brand-primary-80: #d15a7c;
+  --amplify-colors-brand-primary-90: #b54664;
+  --amplify-colors-brand-primary-100: #93334d;
+  
+  --amplify-components-button-border-radius: 12px;
+  --amplify-components-button-primary-background-color: #fba1b7;
+  --amplify-components-button-primary-hover-background-color: #f78da7;
+  --amplify-components-button-primary-focus-background-color: #f78da7;
+  --amplify-components-button-primary-active-background-color: #d15a7c;
+  
+  --amplify-components-tabs-item-active-color: #d15a7c;
+  --amplify-components-tabs-item-active-border-color: #d15a7c;
+
+  --amplify-fonts-default-variable: 'Nunito', sans-serif;
+  --amplify-components-fieldcontrol-border-color: #ebbcc7;
+  --amplify-components-fieldcontrol-focus-border-color: #fba1b7;
+  --amplify-components-fieldcontrol-focus-box-shadow: 0 0 0 3px rgba(251, 161, 183, 0.2);
+}
+
+/* Fix tabs overlapping, borders, and margins */
+.auth-wrapper .amplify-tabs {
+  border: none;
+  margin-bottom: 1.5rem;
+}
+
+.auth-wrapper .amplify-tabs-item {
+  color: #9b8b90;
+  border-width: 0 0 2px 0;
+  border-style: solid;
+  border-color: transparent;
+  background: transparent;
+  padding: 0.8rem 1rem;
+}
+
+.auth-wrapper .amplify-tabs-item[data-state="active"] {
+  color: #d15a7c;
+  border-color: #d15a7c;
+  font-weight: 700;
+}
+
+/* Remove harsh focus outlines */
+.auth-wrapper .amplify-tabs-item:focus,
+.auth-wrapper .amplify-tabs-item:focus-visible {
+  outline: none;
+  box-shadow: none;
+  background-color: rgba(251, 161, 183, 0.1);
+}
+
+.auth-wrapper {
+  margin-top: 1.5rem;
 }

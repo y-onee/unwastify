@@ -1,28 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "react-oidc-context";
+import { signOut } from "aws-amplify/auth";
 import "./Navbar.css";
 
 function Navbar() {
-  const auth = useAuth();
   const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  const handleLogout = () => {
-    const clientId = "1n0raneja90rbsmqjbugggefh9";
-    const logoutUri =
-      window.location.hostname === "localhost"
-        ? "http://localhost:5173"
-        : "https://d1yat59iwg4dcp.cloudfront.net";
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 8);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-    auth.removeUser();
-    window.location.replace(
-      `https://unwastify.auth.us-east-1.amazoncognito.com/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`,
-    );
+  const handleLogout = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">Unwastify</div>
+    <nav className={`navbar ${isScrolled ? "navbar-scrolled" : ""}`}>
+      <Link to="/dashboard" className="navbar-brand">
+        Unwastify
+      </Link>
       <div className="navbar-links">
         <Link
           to="/dashboard"
@@ -40,16 +46,16 @@ function Navbar() {
           to="/shopping-list"
           className={location.pathname === "/shopping-list" ? "active" : ""}
         >
-          Shopping List
+          Shopping list
         </Link>
         <Link
           to="/family-info"
           className={location.pathname === "/family-info" ? "active" : ""}
         >
-          Family Info
+          Family info
         </Link>
-        <button className="btn-secondary" onClick={handleLogout}>
-          Logout
+        <button className="btn-secondary btn-logout" onClick={handleLogout}>
+          Log out
         </button>
       </div>
     </nav>

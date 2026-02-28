@@ -103,7 +103,7 @@ def lambda_handler(event, context):
                 'bought': False
             }
             for i, item in enumerate(shopping_list)
-            if item['item_name'] not in existing_item_names and item['qty'] != 0
+            if item['item_name'] not in existing_item_names and item['qty'] > 0
         ]
 
         if current_week:

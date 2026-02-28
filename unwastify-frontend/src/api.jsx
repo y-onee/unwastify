@@ -1,61 +1,69 @@
 import axios from "axios";
+import { fetchAuthSession } from "aws-amplify/auth";
 
 const BASE_URL = "https://dafe3rfji4.execute-api.us-east-1.amazonaws.com/prod";
 
-const getToken = (auth) => auth.user?.id_token;
-
-const headers = (auth) => ({
-  Authorization: `Bearer ${getToken(auth)}`,
-  "Content-Type": "application/json",
-});
+const getHeaders = async () => {
+  try {
+    const session = await fetchAuthSession();
+    const token = session.tokens?.idToken?.toString();
+    return {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+  } catch (err) {
+    console.error("Error fetching auth session", err);
+    return { "Content-Type": "application/json" };
+  }
+};
 
 // Pantry
-export const getPantry = (auth) =>
-  axios.get(`${BASE_URL}/get_pantry`, { headers: headers(auth) });
+export const getPantry = async () =>
+  axios.get(`${BASE_URL}/get_pantry`, { headers: await getHeaders() });
 
-export const addToPantry = (auth, data) =>
-  axios.post(`${BASE_URL}/add_to_pantry`, data, { headers: headers(auth) });
+export const addToPantry = async (data) =>
+  axios.post(`${BASE_URL}/add_to_pantry`, data, { headers: await getHeaders() });
 
-export const deletePantryItem = (auth, pantry_item_id) =>
+export const deletePantryItem = async (pantry_item_id) =>
   axios.delete(`${BASE_URL}/delete_pantry_item`, {
-    headers: headers(auth),
+    headers: await getHeaders(),
     data: { pantry_item_id },
   });
 
-export const markExpired = (auth, pantry_item_id) =>
+export const markExpired = async (pantry_item_id) =>
   axios.put(
     `${BASE_URL}/mark_expired`,
     { pantry_item_id },
-    { headers: headers(auth) },
+    { headers: await getHeaders() },
   );
 
-export const markWasted = (auth, pantry_item_id, wasted_qty) =>
+export const markWasted = async (pantry_item_id, wasted_qty) =>
   axios.put(
     `${BASE_URL}/mark_wasted`,
     { pantry_item_id, wasted_qty },
-    { headers: headers(auth) },
+    { headers: await getHeaders() },
   );
 
 // Shopping List
-export const getShoppingList = (auth) =>
-  axios.get(`${BASE_URL}/get_shopping_list`, { headers: headers(auth) });
+export const getShoppingList = async () =>
+  axios.get(`${BASE_URL}/get_shopping_list`, { headers: await getHeaders() });
 
-export const generateShoppingList = (auth) =>
-  axios.get(`${BASE_URL}/generate_shopping_list`, { headers: headers(auth) });
+export const generateShoppingList = async () =>
+  axios.get(`${BASE_URL}/generate_shopping_list`, { headers: await getHeaders() });
 
-export const markAsBought = (auth, shopping_item_id) =>
+export const markAsBought = async (shopping_item_id) =>
   axios.put(
     `${BASE_URL}/mark_as_bought`,
     { shopping_item_id },
-    { headers: headers(auth) },
+    { headers: await getHeaders() },
   );
 
-export const deleteShoppingItem = (auth, shopping_item_id) =>
+export const deleteShoppingItem = async (shopping_item_id) =>
   axios.delete(`${BASE_URL}/delete_shopping_item`, {
-    headers: headers(auth),
+    headers: await getHeaders(),
     data: { shopping_item_id },
   });
 
 // Family Info
-export const updateFamilyInfo = (auth, data) =>
-  axios.put(`${BASE_URL}/update_family_info`, data, { headers: headers(auth) });
+export const updateFamilyInfo = async (data) =>
+  axios.put(`${BASE_URL}/update_family_info`, data, { headers: await getHeaders() });

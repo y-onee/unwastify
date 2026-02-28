@@ -27,25 +27,39 @@ def lambda_handler(event, context):
         user_response = users_table.get_item(Key={'user_id': user_id})
         user = user_response['Item']
 
-        original_length = len(user['pantry']['items'])
-        
+        original_pantry_len = len(user['pantry']['items'])
         user['pantry']['items'] = [
             item for item in user['pantry']['items']
             if int(item['pantry_item_id']) != pantry_item_id
         ]
 
-        if len(user['pantry']['items']) == original_length:
-            return {
-                'statusCode': 404,
-                'headers': CORS_HEADERS,
-                'body': json.dumps({'error': 'Item not found in pantry'})
-            }
+        deleted_from_pantry = len(user['pantry']['items']) < original_pantry_len
 
-        users_table.update_item(
-            Key={'user_id': user_id},
-            UpdateExpression='SET pantry = :p',
-            ExpressionAttributeValues={':p': user['pantry']}
-        )
+        if not deleted_from_pantry:
+            expired_items = user.get('expired_pantry', {}).get('items', [])
+            new_expired = [
+                item for item in expired_items
+                if int(item['pantry_item_id']) != pantry_item_id
+            ]
+            if len(new_expired) == len(expired_items):
+                return {
+                    'statusCode': 404,
+                    'headers': CORS_HEADERS,
+                    'body': json.dumps({'error': 'Item not found in pantry'})
+                }
+            users_table.update_item(
+                Key={'user_id': user_id},
+                UpdateExpression='SET expired_pantry = :ep',
+                ExpressionAttributeValues={
+                    ':ep': {'items': new_expired}
+                }
+            )
+        else:
+            users_table.update_item(
+                Key={'user_id': user_id},
+                UpdateExpression='SET pantry = :p',
+                ExpressionAttributeValues={':p': user['pantry']}
+            )
 
         return {
             'statusCode': 200,

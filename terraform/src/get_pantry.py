@@ -22,6 +22,8 @@ def lambda_handler(event, context):
             if item['date_expiry'] > today
         ]
 
+        expired_items = user.get('expired_pantry', {}).get('items', [])
+
         return {
             'statusCode': 200,
             'headers': {
@@ -30,7 +32,10 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps({'pantry': active_items}, cls=DecimalEncoder)
+            'body': json.dumps({
+                'pantry': active_items,
+                'expired_pantry': expired_items
+            }, cls=DecimalEncoder)
         }
     except Exception as e:
         return {

@@ -1,15 +1,24 @@
 .week-label {
-  color: #999;
-  font-size: 0.9rem;
-  margin-bottom: 16px;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .shopping-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #fce4ec;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--color-border);
+  gap: 1rem;
+  transition: background 0.15s ease;
+}
+
+.shopping-item:hover {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .shopping-item:last-child {
@@ -18,20 +27,50 @@
 
 .shopping-item.bought .item-name {
   text-decoration: line-through;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .shopping-item-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0.125rem;
 }
 
-.item-name {
+.shopping-item .item-name {
   font-weight: 500;
+  font-size: 0.9375rem;
 }
 
-.item-qty {
-  color: #999;
-  font-size: 0.9rem;
+.shopping-item .item-qty {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.shopping-item .item-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.shopping-item .item-actions button {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.shopping-item .item-actions .btn-primary {
+  border-radius: var(--radius-md);
+}
+
+.page-header .generate-btn {
+  border-radius: var(--radius-md);
+}
+
+.generate-btn:disabled {
+  cursor: wait;
+}
+
+.empty-state-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
 }

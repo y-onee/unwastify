@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "react-oidc-context";
 import {
   getShoppingList,
   generateShoppingList,
   markAsBought,
   deleteShoppingItem,
 } from "../api";
+import { getNextMonday } from "../utils";
 import "./ShoppingList.css";
 
 function ShoppingList() {
-  const auth = useAuth();
   const [shoppingList, setShoppingList] = useState(null);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -21,8 +20,12 @@ function ShoppingList() {
 
   const fetchShoppingList = async () => {
     try {
-      const res = await getShoppingList(auth);
-      setShoppingList(res.data.shopping_list);
+      const res = await getShoppingList();
+      const list = res.data.shopping_list;
+      if (list && list.items) {
+        list.items.sort((a, b) => a.item_name.localeCompare(b.item_name));
+      }
+      setShoppingList(list);
     } catch (err) {
       setError("Failed to load shopping list");
     } finally {
@@ -33,7 +36,7 @@ function ShoppingList() {
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      await generateShoppingList(auth);
+      await generateShoppingList();
       fetchShoppingList();
     } catch (err) {
       setError("Failed to generate shopping list");
@@ -43,38 +46,32 @@ function ShoppingList() {
   };
 
   const handleMarkBought = async (shopping_item_id) => {
-    const token = auth.user?.id_token;
-    console.log("handleMarkBought called, token present?", !!token, token);
     try {
-      const res = await markAsBought(auth, shopping_item_id);
-      console.log("markAsBought response", res);
+      await markAsBought(shopping_item_id);
     } catch (err) {
-      console.error(
-        "markAsBought error",
-        err.response ? err.response.data : err,
-      );
+      console.error("markAsBought error", err.response?.data ?? err);
       setError("Failed to mark item bought");
     }
     fetchShoppingList();
   };
 
   const handleDelete = async (shopping_item_id) => {
-    await deleteShoppingItem(auth, shopping_item_id);
+    await deleteShoppingItem(shopping_item_id);
     fetchShoppingList();
   };
 
-  if (loading) return <div className="loading">Loading shopping list...</div>;
+  if (loading) return <div className="loading">Loading shopping list…</div>;
 
   return (
     <div className="page-container">
       <div className="page-header">
-        <h2>Shopping List</h2>
+        <h2>Shopping list</h2>
         <button
-          className="btn-primary"
+          className="btn-primary generate-btn"
           onClick={handleGenerate}
           disabled={generating}
         >
-          {generating ? "Generating..." : "✨ Generate with AI"}
+          {generating ? "Generating…" : "✨ Generate with AI"}
         </button>
       </div>
 
@@ -82,11 +79,12 @@ function ShoppingList() {
 
       {!shoppingList || shoppingList.items?.length === 0 ? (
         <div className="empty-state">
-          No items. Click Generate to create your shopping list!
+          <div className="empty-state-icon">🛒</div>
+          No items yet. Click Generate to create your shopping list from your pantry and family info.
         </div>
       ) : (
         <div className="card">
-          <p className="week-label">Week of {shoppingList.date}</p>
+          <p className="week-label">Week of {getNextMonday()}</p>
           {shoppingList.items.map((item) => (
             <div
               className={`shopping-item ${item.bought ? "bought" : ""}`}

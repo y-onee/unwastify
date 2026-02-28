@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { useAuth } from "react-oidc-context";
 import { updateFamilyInfo } from "../api";
 import "./FamilyInfo.css";
 
 function FamilyInfo() {
-  const auth = useAuth();
   const [form, setForm] = useState({
     num_adults: "",
     num_kids: "",
@@ -16,7 +14,7 @@ function FamilyInfo() {
 
   const handleSubmit = async () => {
     try {
-      await updateFamilyInfo(auth, {
+      await updateFamilyInfo({
         num_adults: parseInt(form.num_adults),
         num_kids: parseInt(form.num_kids),
         meals_per_day: parseInt(form.meals_per_day),
@@ -32,35 +30,44 @@ function FamilyInfo() {
   return (
     <div className="page-container">
       <div className="page-header">
-        <h2>Family Info</h2>
+        <h2>Family info</h2>
       </div>
 
-      {success && <div className="success-msg">Family info updated!</div>}
+      {success && <div className="success-msg">Family info updated.</div>}
       {error && <div className="error-msg">{error}</div>}
 
       <div className="card">
+        <p className="form-intro">
+          This helps us tailor your shopping list and reduce waste. You can update these anytime.
+        </p>
         <div className="form-group">
-          <label>Number of Adults</label>
+          <label htmlFor="num_adults">Number of adults</label>
           <input
+            id="num_adults"
             type="number"
+            min="0"
             placeholder="e.g. 2"
             value={form.num_adults}
             onChange={(e) => setForm({ ...form, num_adults: e.target.value })}
           />
         </div>
         <div className="form-group">
-          <label>Number of Kids</label>
+          <label htmlFor="num_kids">Number of kids</label>
           <input
+            id="num_kids"
             type="number"
+            min="0"
             placeholder="e.g. 1"
             value={form.num_kids}
             onChange={(e) => setForm({ ...form, num_kids: e.target.value })}
           />
         </div>
         <div className="form-group">
-          <label>Meals per Day</label>
+          <label htmlFor="meals_per_day">Meals per day</label>
           <input
+            id="meals_per_day"
             type="number"
+            min="0"
             placeholder="e.g. 3"
             value={form.meals_per_day}
             onChange={(e) =>
@@ -69,9 +76,11 @@ function FamilyInfo() {
           />
         </div>
         <div className="form-group">
-          <label>Eat Out per Week</label>
+          <label htmlFor="eat_out_per_week">Eat out per week</label>
           <input
+            id="eat_out_per_week"
             type="number"
+            min="0"
             placeholder="e.g. 2"
             value={form.eat_out_per_week}
             onChange={(e) =>
