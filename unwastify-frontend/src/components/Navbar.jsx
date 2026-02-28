@@ -7,6 +7,19 @@ function Navbar() {
   const auth = useAuth();
   const location = useLocation();
 
+  const handleLogout = () => {
+    const clientId = "1n0raneja90rbsmqjbugggefh9";
+    const logoutUri =
+      window.location.hostname === "localhost"
+        ? "http://localhost:5173"
+        : "https://d1yat59iwg4dcp.cloudfront.net";
+
+    auth.removeUser();
+    window.location.replace(
+      `https://unwastify.auth.us-east-1.amazoncognito.com/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`,
+    );
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">Unwastify</div>
@@ -29,10 +42,7 @@ function Navbar() {
         >
           Family Info
         </Link>
-        <button
-          className="btn-secondary"
-          onClick={() => auth.signoutRedirect()}
-        >
+        <button className="btn-secondary" onClick={handleLogout}>
           Logout
         </button>
       </div>
