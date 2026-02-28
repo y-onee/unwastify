@@ -9,6 +9,9 @@ phases:
       - unzip -o terraform_1.5.7_linux_amd64.zip -d /tmp/terraform
       - mv /tmp/terraform/terraform /usr/local/bin/terraform
       - terraform --version
+      - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+      - apt-get install -y nodejs
+      - node --version
       - cd unwastify-frontend && npm install
 
   build:
@@ -19,7 +22,6 @@ phases:
       - terraform init
       - terraform apply -auto-approve
       - cd $CODEBUILD_SRC_DIR/unwastify-frontend
-      - rm -rf node_modules/.vite
       - npm run build
       - aws s3 sync dist/ s3://unwastify-frontend --delete
 
