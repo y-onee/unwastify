@@ -69,14 +69,19 @@ def lambda_handler(event, context):
         )
         
         if shelf_response['Count'] == 0:
-            return {
-                'statusCode': 404,
-                'headers': CORS_HEADERS,
-                'body': json.dumps({'error': f'Item {item_name} not found in shelf life table'})
-            }
-
-        shelf_life = int(shelf_response['Items'][0]['shelf_life'])
-        item_id = int(shelf_response['Items'][0]['item_id'])
+            # if item not in shelf life table, create entry with default life (7 days)
+            shelf_life = 7
+            item_id = int(time.time() * 1000)
+            shelf_life_table.put_item(
+                Item={
+                    'item_id': item_id,
+                    'item_name': item_name,
+                    'shelf_life': shelf_life
+                }
+            )
+        else:
+            shelf_life = int(shelf_response['Items'][0]['shelf_life'])
+            item_id = int(shelf_response['Items'][0]['item_id'])
 
         # Add to pantry
         date_bought = int(datetime.datetime.now().strftime('%Y%m%d'))

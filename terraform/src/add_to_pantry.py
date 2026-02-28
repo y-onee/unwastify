@@ -35,11 +35,21 @@ def lambda_handler(event, context):
         )
 
         if shelf_response['Count'] == 0:
-            if 'shelf_life' not in body:
+            # missing shelf life for new item
+            if 'shelf_life' not in body or body.get('shelf_life') in (None, ""):
                 return {
                     'statusCode': 400,
                     'headers': CORS_HEADERS,
                     'body': json.dumps({'error': 'Item not found. Please provide shelf_life to add it.'})
+                }
+
+            try:
+                shelf_life = int(body['shelf_life'])
+            except Exception:
+                return {
+                    'statusCode': 400,
+                    'headers': CORS_HEADERS,
+                    'body': json.dumps({'error': 'Invalid shelf_life value'})
                 }
 
             new_item_id = int(time.time() * 1000)
@@ -47,10 +57,9 @@ def lambda_handler(event, context):
                 Item={
                     'item_id': new_item_id,
                     'item_name': item_name,
-                    'shelf_life': body['shelf_life']
+                    'shelf_life': shelf_life
                 }
             )
-            shelf_life = int(body['shelf_life'])
             item_id = new_item_id
         else:
             shelf_item = shelf_response['Items'][0]

@@ -43,7 +43,18 @@ function ShoppingList() {
   };
 
   const handleMarkBought = async (shopping_item_id) => {
-    await markAsBought(auth, shopping_item_id);
+    const token = auth.user?.id_token;
+    console.log("handleMarkBought called, token present?", !!token, token);
+    try {
+      const res = await markAsBought(auth, shopping_item_id);
+      console.log("markAsBought response", res);
+    } catch (err) {
+      console.error(
+        "markAsBought error",
+        err.response ? err.response.data : err,
+      );
+      setError("Failed to mark item bought");
+    }
     fetchShoppingList();
   };
 

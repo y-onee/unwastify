@@ -2,7 +2,7 @@ import hashlib
 import json
 import boto3
 from decimal_helper import DecimalEncoder
-import hashlib
+import datetime
 
 dynamodb = boto3.resource('dynamodb')
 users_table = dynamodb.Table('user_details')
@@ -22,10 +22,27 @@ def lambda_handler(event, context):
         user_response = users_table.get_item(Key={'user_id': user_id})
         user = user_response['Item']
 
+        # Get current week
+        week_date = datetime.datetime.now().strftime('%Y%m%d')
+        current_week = None
+        
+        for week in user['shopping_list']['weeks']:
+            if (datetime.datetime.strptime(week_date, '%Y%m%d') - datetime.datetime.strptime(week['date'], '%Y%m%d')).days < 7:
+                current_week = week
+                break
+        
+        # If no current week, return empty structure
+        if not current_week:
+            current_week = {
+                'week_id': '0',
+                'date': week_date,
+                'items': []
+            }
+
         return {
             'statusCode': 200,
             'headers': CORS_HEADERS,
-            'body': json.dumps({'shopping_list': user['shopping_list']}, cls=DecimalEncoder)
+            'body': json.dumps({'shopping_list': current_week}, cls=DecimalEncoder)
         }
     except Exception as e:
         return {

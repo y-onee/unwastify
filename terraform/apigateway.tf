@@ -360,6 +360,28 @@ resource "aws_api_gateway_authorizer" "cognito" {
   provider_arns = [aws_cognito_user_pool.user_pool.arn]
 }
 
+resource "aws_api_gateway_gateway_response" "cors" {
+  rest_api_id   = aws_api_gateway_rest_api.shopping_api.id
+  response_type = "DEFAULT_4XX"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
+    "gatewayresponse.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
+  }
+}
+
+resource "aws_api_gateway_gateway_response" "cors_5xx" {
+  rest_api_id   = aws_api_gateway_rest_api.shopping_api.id
+  response_type = "DEFAULT_5XX"
+
+  response_parameters = {
+    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
+    "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
+    "gatewayresponse.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
+  }
+}
+
 # Deploy
 resource "aws_api_gateway_deployment" "shopping_api" {
   rest_api_id = aws_api_gateway_rest_api.shopping_api.id
@@ -383,6 +405,8 @@ resource "aws_api_gateway_deployment" "shopping_api" {
     aws_api_gateway_integration.mark_expired_integration,
     aws_api_gateway_integration.mark_wasted_integration,
     aws_api_gateway_integration.update_family_info_integration,
+    aws_api_gateway_integration.options,
+    aws_api_gateway_integration_response.options,
   ]
 }
 

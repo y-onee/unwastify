@@ -39,7 +39,11 @@ function Pantry() {
 
   const handleAddItem = async () => {
     try {
-      await addToPantry(auth, newItem);
+      const payload = { ...newItem };
+      if (payload.shelf_life === "" || payload.shelf_life == null) {
+        delete payload.shelf_life;
+      }
+      await addToPantry(auth, payload);
       setNewItem({ item_name: "", qty: "", shelf_life: "" });
       setShowAddForm(false);
       fetchPantry();
@@ -106,9 +110,13 @@ function Pantry() {
             placeholder="Shelf life (days) — only if new item"
             type="number"
             value={newItem.shelf_life}
-            onChange={(e) =>
-              setNewItem({ ...newItem, shelf_life: parseInt(e.target.value) })
-            }
+            onChange={(e) => {
+              const v = e.target.value;
+              setNewItem({
+                ...newItem,
+                shelf_life: v === "" ? "" : parseInt(v),
+              });
+            }}
           />
           <div className="form-actions">
             <button className="btn-primary" onClick={handleAddItem}>
