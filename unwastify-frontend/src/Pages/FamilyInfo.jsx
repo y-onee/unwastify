@@ -66,7 +66,7 @@ function FamilyInfo() {
         <h2>Family info</h2>
         {!editing && hasInfo && (
           <button className="btn-secondary" onClick={() => setEditing(true)}>
-            ✏️ Edit for next week
+            Edit for next week
           </button>
         )}
       </div>

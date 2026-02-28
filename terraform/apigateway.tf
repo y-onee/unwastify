@@ -420,7 +420,19 @@ resource "aws_api_gateway_deployment" "shopping_api" {
   rest_api_id = aws_api_gateway_rest_api.shopping_api.id
 
   triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.shopping_api.body))
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_integration.add_to_pantry_integration,
+      aws_api_gateway_integration.delete_pantry_item_integration,
+      aws_api_gateway_integration.delete_shopping_item_integration,
+      aws_api_gateway_integration.generate_shopping_list_integration,
+      aws_api_gateway_integration.get_pantry_integration,
+      aws_api_gateway_integration.get_shopping_list_integration,
+      aws_api_gateway_integration.mark_as_bought_integration,
+      aws_api_gateway_integration.mark_expired_integration,
+      aws_api_gateway_integration.mark_wasted_integration,
+      aws_api_gateway_integration.update_family_info_integration,
+      aws_api_gateway_integration.get_family_info_integration,
+    ]))
   }
 
   lifecycle {

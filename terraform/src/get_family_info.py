@@ -1,6 +1,7 @@
 import json
 import boto3
 import hashlib
+from decimal_helper import DecimalEncoder
 
 dynamodb = boto3.resource('dynamodb')
 users_table = dynamodb.Table('user_details')
@@ -24,7 +25,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'headers': CORS_HEADERS,
-            'body': json.dumps({'family_info': family_info})
+            'body': json.dumps({'family_info': family_info}, cls=DecimalEncoder)
         }
     except Exception as e:
         return {
