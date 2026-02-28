@@ -6,10 +6,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useAuth } from "react-oidc-context";
-import Login from "./pages/Login";
-import Pantry from "./pages/Pantry";
-import ShoppingList from "./pages/ShoppingList";
-import FamilyInfo from "./pages/FamilyInfo";
+import Login from "./Pages/Login";
+import Pantry from "./Pages/Pantry";
+import ShoppingList from "./Pages/ShoppingList";
+import FamilyInfo from "./Pages/FamilyInfo";
 import Navbar from "./components/Navbar";
 import "./App.css";
 
