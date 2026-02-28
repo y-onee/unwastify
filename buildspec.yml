@@ -19,6 +19,7 @@ phases:
       - terraform init
       - terraform apply -auto-approve
       - cd $CODEBUILD_SRC_DIR/unwastify-frontend
+      - rm -rf node_modules/.vite
       - npm run build
       - aws s3 sync dist/ s3://unwastify-frontend --delete
 
