@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getPantry } from "../api";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import { formatDate } from "../utils";
+import { Link } from "react-router-dom";
 import "./Dashboard.css";
 
 function Dashboard() {
@@ -57,6 +58,11 @@ function Dashboard() {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (utilization / 100) * circumference;
 
+  // Day-based banners: 0=Sun, 5=Fri, 6=Sat
+  const dayOfWeek = new Date().getDay();
+  const showFamilyPrompt = dayOfWeek === 5 || dayOfWeek === 6;
+  const showShoppingReady = dayOfWeek === 0;
+
   if (loading) return <div className="loading">Loading...</div>;
 
   return (
@@ -80,6 +86,28 @@ function Dashboard() {
           <div className="stat-label">Expiring soon</div>
         </div>
       </div>
+
+      {showFamilyPrompt && (
+        <div className="card dashboard-banner banner-prompt">
+          
+          <div>
+            <strong>Planning changes for next week?</strong>
+            <p>Any guests staying over or extra eat-outs? Update your family profile so your shopping list is accurate.</p>
+          </div>
+          <Link to="/family-info" className="btn-secondary banner-action">Update profile</Link>
+        </div>
+      )}
+
+      {showShoppingReady && (
+        <div className="card dashboard-banner banner-ready">
+          
+          <div>
+            <strong>Your shopping list for the week is ready!</strong>
+            <p>Head over to your shopping list to see what to pick up this week.</p>
+          </div>
+          <Link to="/shopping-list" className="btn-primary banner-action">View list</Link>
+        </div>
+      )}
 
       {expiringSoon.length > 0 && (
         <div className="card dashboard-section">

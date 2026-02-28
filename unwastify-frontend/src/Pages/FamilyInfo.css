@@ -39,3 +39,33 @@
   margin-bottom: 1.25rem;
   line-height: 1.55;
 }
+
+.family-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.family-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background: var(--color-background);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1rem;
+}
+
+.family-info-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.family-info-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}

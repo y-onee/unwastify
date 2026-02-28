@@ -177,3 +177,52 @@
   color: var(--color-text);
   font-variant-numeric: tabular-nums;
 }
+
+/* Day-aware banners */
+.dashboard-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-banner .banner-icon {
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.dashboard-banner > div {
+  flex: 1;
+}
+
+.dashboard-banner strong {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.2rem;
+}
+
+.dashboard-banner p {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.banner-action {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+
+.banner-prompt {
+  border-left: 3px solid var(--color-primary);
+}
+
+.banner-ready {
+  border-left: 3px solid #22c55e;
+}

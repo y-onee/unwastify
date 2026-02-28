@@ -126,6 +126,19 @@ resource "aws_lambda_function" "mark_wasted" {
 }
 
 
+# Get Family Info
+resource "aws_lambda_function" "get_family_info" {
+  function_name    = "get_family_info"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "get_family_info.lambda_handler"
+  runtime          = "python3.13"
+  layers           = [aws_lambda_layer_version.common_utils.arn]
+  filename         = "lambdas/get_family_info.zip"
+  source_code_hash = filebase64sha256("lambdas/get_family_info.zip")
+  timeout          = 30
+  memory_size      = 256
+}
+
 # Update Family Info
 resource "aws_lambda_function" "update_family_info" {
   function_name    = "update_family_info"

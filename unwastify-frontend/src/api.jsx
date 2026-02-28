@@ -65,5 +65,8 @@ export const deleteShoppingItem = async (shopping_item_id) =>
   });
 
 // Family Info
+export const getFamilyInfo = async () =>
+  axios.get(`${BASE_URL}/get_family_info`, { headers: await getHeaders() });
+
 export const updateFamilyInfo = async (data) =>
   axios.put(`${BASE_URL}/update_family_info`, data, { headers: await getHeaders() });

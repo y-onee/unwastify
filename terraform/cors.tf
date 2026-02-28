@@ -10,6 +10,7 @@ locals {
     mark_expired           = { id = aws_api_gateway_resource.mark_expired.id, method = "PUT" }
     mark_wasted            = { id = aws_api_gateway_resource.mark_wasted.id, method = "PUT" }
     update_family_info     = { id = aws_api_gateway_resource.update_family_info.id, method = "PUT" }
+    get_family_info        = { id = aws_api_gateway_resource.get_family_info.id, method = "GET" }
   }
 }
 

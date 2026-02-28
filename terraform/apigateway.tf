@@ -332,6 +332,39 @@ resource "aws_lambda_permission" "update_family_info_permission" {
   source_arn    = "${aws_api_gateway_rest_api.shopping_api.execution_arn}/*/*"
 }
 
+# Get Family Info
+
+resource "aws_api_gateway_resource" "get_family_info" {
+  rest_api_id = aws_api_gateway_rest_api.shopping_api.id
+  parent_id   = aws_api_gateway_rest_api.shopping_api.root_resource_id
+  path_part   = "get_family_info"
+}
+
+resource "aws_api_gateway_method" "get_family_info_method" {
+  rest_api_id   = aws_api_gateway_rest_api.shopping_api.id
+  resource_id   = aws_api_gateway_resource.get_family_info.id
+  http_method   = "GET"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.cognito.id
+}
+
+resource "aws_api_gateway_integration" "get_family_info_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.shopping_api.id
+  resource_id             = aws_api_gateway_resource.get_family_info.id
+  http_method             = aws_api_gateway_method.get_family_info_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.get_family_info.invoke_arn
+}
+
+resource "aws_lambda_permission" "get_family_info_permission" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.get_family_info.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.shopping_api.execution_arn}/*/*"
+}
+
 resource "aws_api_gateway_stage" "prod" {
   deployment_id = aws_api_gateway_deployment.shopping_api.id
   rest_api_id   = aws_api_gateway_rest_api.shopping_api.id
@@ -405,6 +438,7 @@ resource "aws_api_gateway_deployment" "shopping_api" {
     aws_api_gateway_integration.mark_expired_integration,
     aws_api_gateway_integration.mark_wasted_integration,
     aws_api_gateway_integration.update_family_info_integration,
+    aws_api_gateway_integration.get_family_info_integration,
     aws_api_gateway_integration.options,
     aws_api_gateway_integration_response.options,
   ]
