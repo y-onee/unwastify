@@ -98,7 +98,7 @@ function Dashboard() {
       )}
 
       <div className="card download-card">
-        <h3>📥 Expired Pantry Report</h3>
+        <h3>Expired Pantry Report</h3>
         <p>Download a CSV of all your expired items.</p>
         <button className="btn-primary" onClick={downloadExpiredPantry}>
           Download Report
