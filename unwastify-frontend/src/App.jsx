@@ -11,7 +11,7 @@ import Pantry from "./Pages/Pantry";
 import ShoppingList from "./Pages/ShoppingList";
 import FamilyInfo from "./Pages/FamilyInfo";
 import Navbar from "./components/Navbar";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./Pages/Dashboard";
 import "./App.css";
 
 function App() {
