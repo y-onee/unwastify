@@ -65,7 +65,7 @@ def predict_for_item(item, num_adults, num_kids, eat_out_frequency, avg_temp, ef
     )
 
     result = json.loads(json.loads(response['Payload'].read())['body'])
-    predicted_qty = result['predicted_quantity']
+    predicted_qty = int(result['predicted_quantity'])
 
     return {
         'item_id': int(item['item_id']),

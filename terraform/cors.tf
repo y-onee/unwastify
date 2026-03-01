@@ -82,4 +82,19 @@ resource "aws_api_gateway_method_response" "cors_methods" {
     "method.response.header.Access-Control-Allow-Methods" = true
     "method.response.header.Access-Control-Allow-Origin"  = true
   }
+
+  depends_on = [
+    aws_api_gateway_method.add_to_pantry_method,
+    aws_api_gateway_method.delete_pantry_item_method,
+    aws_api_gateway_method.delete_shopping_item_method,
+    aws_api_gateway_method.generate_shopping_list_method,
+    aws_api_gateway_method.get_pantry_method,
+    aws_api_gateway_method.get_shopping_list_method,
+    aws_api_gateway_method.mark_consumed_method,
+    aws_api_gateway_method.mark_as_bought_method,
+    aws_api_gateway_method.mark_expired_method,
+    aws_api_gateway_method.mark_wasted_method,
+    aws_api_gateway_method.update_family_info_method,
+    aws_api_gateway_method.get_family_info_method
+  ]
 }
