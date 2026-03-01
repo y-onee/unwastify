@@ -25,7 +25,7 @@ phases:
       - docker buildx create --use --name mybuilder || true
       - DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --provenance=false --push -t 250857930603.dkr.ecr.us-east-1.amazonaws.com/shopping_model:latest $CODEBUILD_SRC_DIR/shopping-model/
 
-      # Build and deploy React frontend for provision 1.6
+      # Build and deploy React frontend for provision 1.7
       - cd $CODEBUILD_SRC_DIR/unwastify-frontend
       - npm run build
       - aws s3 sync dist/ s3://unwastify-frontend --delete
