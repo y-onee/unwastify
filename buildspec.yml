@@ -13,11 +13,19 @@ phases:
 
   build:
     commands:
+      # 1. Build and push ML model Docker image to ECR
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 250857930603.dkr.ecr.us-east-1.amazonaws.com
+      - docker buildx create --use --name mybuilder || true
+      - DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --provenance=false --push -t 250857930603.dkr.ecr.us-east-1.amazonaws.com/shopping_model:latest $CODEBUILD_SRC_DIR/shopping-model/
+
+      # 2. Zip and deploy Lambda functions via Terraform
       - cd $CODEBUILD_SRC_DIR/terraform
       - mkdir -p lambdas
       - for lambda in add_to_pantry delete_pantry_item delete_shopping_item generate_shopping_list get_family_info get_pantry get_shopping_list mark_as_bought mark_expired mark_wasted post_confirmation update_family_info; do zip -j lambdas/$lambda.zip src/$lambda.py layers/common_utils/python/decimal_helper.py; done
       - terraform init
       - terraform apply -auto-approve
+
+      # 3. Build and deploy React frontend
       - cd $CODEBUILD_SRC_DIR/unwastify-frontend
       - npm run build
       - aws s3 sync dist/ s3://unwastify-frontend --delete
