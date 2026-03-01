@@ -21,7 +21,7 @@ phases:
       # 2. Zip and deploy Lambda functions via Terraform
       - cd $CODEBUILD_SRC_DIR/terraform
       - mkdir -p lambdas
-      - for lambda in add_to_pantry delete_pantry_item delete_shopping_item generate_shopping_list get_family_info get_pantry get_shopping_list mark_as_bought mark_expired mark_wasted post_confirmation update_family_info; do zip -j lambdas/$lambda.zip src/$lambda.py layers/common_utils/python/decimal_helper.py; done
+      - for lambda in add_to_pantry delete_pantry_item delete_shopping_item generate_shopping_list get_family_info get_pantry get_shopping_list mark_as_bought mark_consumed mark_expired mark_wasted post_confirmation update_family_info; do zip -j lambdas/$lambda.zip src/$lambda.py layers/common_utils/python/decimal_helper.py; done
       - terraform init
       - terraform apply -auto-approve
 
