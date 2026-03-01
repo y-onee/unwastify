@@ -6,7 +6,6 @@ locals {
     delete_shopping_item   = { id = aws_api_gateway_resource.delete_shopping_item.id, method = "DELETE" }
     generate_shopping_list = { id = aws_api_gateway_resource.generate_shopping_list.id, method = "GET" }
     get_shopping_list      = { id = aws_api_gateway_resource.get_shopping_list.id, method = "GET" }
-    clear_shopping_list    = { id = aws_api_gateway_resource.clear_shopping_list.id, method = "DELETE" }
     mark_consumed          = { id = aws_api_gateway_resource.mark_consumed.id, method = "PUT" }
     mark_as_bought         = { id = aws_api_gateway_resource.mark_as_bought.id, method = "PUT" }
     mark_expired           = { id = aws_api_gateway_resource.mark_expired.id, method = "PUT" }

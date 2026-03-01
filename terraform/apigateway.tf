@@ -199,13 +199,6 @@ resource "aws_lambda_permission" "get_shopping_list_permission" {
   source_arn    = "${aws_api_gateway_rest_api.shopping_api.execution_arn}/*/*"
 }
 
-resource "aws_lambda_permission" "clear_shopping_list_permission" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.clear_shopping_list.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.shopping_api.execution_arn}/*/*"
-}
 
 # mark_consumed
 resource "aws_api_gateway_resource" "mark_consumed" {
