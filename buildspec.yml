@@ -25,7 +25,7 @@ phases:
       - terraform init
       - terraform apply -auto-approve
 
-      # 3. Build and deploy React frontend for provision 1.4
+      # 3. Build and deploy React frontend for provision 1.5
       - cd $CODEBUILD_SRC_DIR/unwastify-frontend
       - npm run build
       - aws s3 sync dist/ s3://unwastify-frontend --delete
