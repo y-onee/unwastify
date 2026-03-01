@@ -308,14 +308,6 @@ function Pantry() {
                       {formatDate(item.date_expiry)}
                     </p>
                   </div>
-                  <div className="item-actions">
-                    <button
-                      className="btn-danger"
-                      onClick={() => handleDelete(item.pantry_item_id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
                 </div>
                 <div className="wasted-row">
                   <input

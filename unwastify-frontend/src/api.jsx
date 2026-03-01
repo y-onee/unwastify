@@ -48,8 +48,15 @@ export const markWasted = async (pantry_item_id, wasted_qty) =>
 export const getShoppingList = async () =>
   axios.get(`${BASE_URL}/get_shopping_list`, { headers: await getHeaders() });
 
-export const generateShoppingList = async () =>
-  axios.get(`${BASE_URL}/generate_shopping_list`, { headers: await getHeaders() });
+export const generateShoppingList = async ({ lat, lon, temp } = {}) => {
+  const params = {};
+  if (lat != null && lon != null) { params.lat = lat; params.lon = lon; }
+  if (temp != null) params.temp = temp;
+  return axios.get(`${BASE_URL}/generate_shopping_list`, {
+    headers: await getHeaders(),
+    params,
+  });
+};
 
 export const markAsBought = async (shopping_item_id) =>
   axios.put(
