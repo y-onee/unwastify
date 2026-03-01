@@ -5,6 +5,7 @@ import {
   deletePantryItem,
   markExpired,
   markWasted,
+  markConsumed,
 } from "../api";
 import "./Pantry.css";
 
@@ -127,6 +128,16 @@ function Pantry() {
     }
   };
 
+  const handleMarkConsumed = async (pantry_item_id) => {
+    try {
+      await markConsumed(pantry_item_id);
+      fetchPantry();
+      setError("");
+    } catch (err) {
+      setError("Failed to mark item as consumed.");
+    }
+  };
+
   if (loading) return <div className="loading">Loading pantry…</div>;
 
   return (
@@ -235,6 +246,7 @@ function Pantry() {
                     <p className="meta">
                       Qty: {item.qty} · Wasted: {item.wasted} · Expires:{" "}
                       {formatDate(item.date_expiry)}
+                      {item.consumed && <span className="consumed-badge"> · Consumed</span>}
                     </p>
                   </div>
                   <div className="item-actions">
@@ -244,6 +256,14 @@ function Pantry() {
                     >
                       Expired
                     </button>
+                    {!item.consumed && (
+                      <button
+                        className="btn-secondary"
+                        onClick={() => handleMarkConsumed(item.pantry_item_id)}
+                      >
+                        Consumed
+                      </button>
+                    )}
                     <button
                       className="btn-danger"
                       onClick={() => handleDelete(item.pantry_item_id)}

@@ -44,6 +44,13 @@ export const markWasted = async (pantry_item_id, wasted_qty) =>
     { headers: await getHeaders() },
   );
 
+export const markConsumed = async (pantry_item_id) =>
+  axios.put(
+    `${BASE_URL}/mark_consumed`,
+    { pantry_item_id },
+    { headers: await getHeaders() },
+  );
+
 // Shopping List
 export const getShoppingList = async () =>
   axios.get(`${BASE_URL}/get_shopping_list`, { headers: await getHeaders() });

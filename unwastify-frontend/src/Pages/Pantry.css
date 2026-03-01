@@ -160,3 +160,8 @@
   margin-bottom: 0.75rem;
   opacity: 0.5;
 }
+
+.consumed-badge {
+  color: var(--color-primary);
+  font-weight: 600;
+}

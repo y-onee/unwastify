@@ -152,6 +152,18 @@ resource "aws_lambda_function" "update_family_info" {
   memory_size      = 256
 }
 
+resource "aws_lambda_function" "mark_consumed" {
+  function_name    = "mark_consumed"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "mark_consumed.lambda_handler"
+  runtime          = "python3.13"
+  layers           = [aws_lambda_layer_version.common_utils.arn]
+  filename         = "lambdas/mark_consumed.zip"
+  source_code_hash = filebase64sha256("lambdas/mark_consumed.zip")
+  timeout          = 30
+  memory_size      = 256
+}
+
 #post-registration function
 resource "aws_lambda_function" "post_confirmation" {
   function_name    = "post_confirmation"

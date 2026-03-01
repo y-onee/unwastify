@@ -199,6 +199,46 @@ resource "aws_lambda_permission" "get_shopping_list_permission" {
   source_arn    = "${aws_api_gateway_rest_api.shopping_api.execution_arn}/*/*"
 }
 
+resource "aws_lambda_permission" "clear_shopping_list_permission" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.clear_shopping_list.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.shopping_api.execution_arn}/*/*"
+}
+
+# mark_consumed
+resource "aws_api_gateway_resource" "mark_consumed" {
+  rest_api_id = aws_api_gateway_rest_api.shopping_api.id
+  parent_id   = aws_api_gateway_rest_api.shopping_api.root_resource_id
+  path_part   = "mark_consumed"
+}
+
+resource "aws_api_gateway_method" "mark_consumed_method" {
+  rest_api_id   = aws_api_gateway_rest_api.shopping_api.id
+  resource_id   = aws_api_gateway_resource.mark_consumed.id
+  http_method   = "PUT"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = aws_api_gateway_authorizer.cognito.id
+}
+
+resource "aws_api_gateway_integration" "mark_consumed_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.shopping_api.id
+  resource_id             = aws_api_gateway_resource.mark_consumed.id
+  http_method             = aws_api_gateway_method.mark_consumed_method.http_method
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.mark_consumed.invoke_arn
+}
+
+resource "aws_lambda_permission" "mark_consumed_permission" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.mark_consumed.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.shopping_api.execution_arn}/*/*"
+}
+
 # Mark as Bought
 resource "aws_api_gateway_resource" "mark_as_bought" {
   rest_api_id = aws_api_gateway_rest_api.shopping_api.id

@@ -41,7 +41,11 @@ def get_temperature(lat, lon):
 def predict_for_item(item, num_adults, num_kids, eat_out_frequency, avg_temp, effective_persons):
     """Fetch shelf life and invoke the ML model for a single item. Runs in a thread."""
     shelf_items_response = shelf_life_table.get_item(Key={'item_id': int(item['item_id'])})
-    shelf_life = int(shelf_items_response['Item']['shelf_life'])
+    if 'Item' in shelf_items_response:
+        shelf_life = int(shelf_items_response['Item']['shelf_life'])
+    else:
+        print(f"[generate_shopping_list] WARNING: item_id {item.get('item_id')} not found in shelf_life table. Defaulting to 7 days.")
+        shelf_life = 7
     qty_consumed = int(item['qty']) - int(item['wasted'])
     consumption_rate = round(qty_consumed / effective_persons, 3)
 
@@ -99,8 +103,15 @@ def lambda_handler(event, context):
         for item in pantry_items:
             days_until_expiry = (datetime.datetime.strptime(str(item['date_expiry']), '%Y%m%d') - datetime.datetime.now()).days
             qty_left = item['qty'] - item['wasted']
-            if days_until_expiry <= 2 or qty_left <= 0:
+            if days_until_expiry <= 2 or qty_left <= 0 or item.get('consumed', False):
                 flagged_items.append(item)
+
+        # Also include items manually marked as expired — they need replacing too
+        # Only include expired items that have a valid item_id (needed by the ML model)
+        expired_items = user.get('expired_pantry', {}).get('items', [])
+        for ei in expired_items:
+            if ei.get('item_id') is not None:
+                flagged_items.append(ei)
 
         num_adults = int(family_info['num_adults'])
         num_kids = int(family_info['num_kids'])
@@ -169,6 +180,9 @@ def lambda_handler(event, context):
             }, cls=DecimalEncoder)
         }
     except Exception as e:
+        import traceback
+        print(f"[generate_shopping_list] ERROR: {type(e).__name__}: {e}")
+        print(traceback.format_exc())
         return {
             'statusCode': 500,
             'headers': CORS_HEADERS,
